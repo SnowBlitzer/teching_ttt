@@ -20,50 +20,34 @@ def init_board(ttt_display):
     background.fill((250, 250, 250))
 
     # Draw the board_state lines - vertical than horizontal
-    pygame.draw.line(background, (0, 0, 0), (100, 0), (100, 300), 2)
-    pygame.draw.line(background, (0, 0, 0), (200, 0), (200, 300), 2)
+    pygame.draw.line(background, (0, 0, 0), (150, 0), (150, 450), 3)
+    pygame.draw.line(background, (0, 0, 0), (300, 0), (300, 450), 3)
 
-    pygame.draw.line(background, (0, 0, 0), (0, 100), (300, 100), 2)
-    pygame.draw.line(background, (0, 0, 0), (0, 200), (300, 200), 2)
+    pygame.draw.line(background, (0, 0, 0), (0, 150), (450, 150), 3)
+    pygame.draw.line(background, (0, 0, 0), (0, 300), (450, 300), 3)
 
     return background
 
-def display_winning(board, winner):
-    """ Displays a message when a winner is found"""
-
-    if winner == None:
-        winning_message = "Draw between players!"
-    else:
-        winning_message = "Player " + winner + " has won!"
-
-    font = pygame.font.Font(None, 24)
-    text = font.render(winning_message, 1, (10, 10, 10))
-
-    # Adds the message above to the board
-    board.fill((250, 250, 250), (0, 300, 300, 25))
-    board.blit(text, (10, 300))
-
 def draw_move(board, boardRow, boardCol):
-
     # Find center of clicked square - used to draw out from
-    center_x = (boardCol * 100) + 50
-    center_y = (boardRow * 100) + 50
+    center_x = (boardCol * 150) + 75
+    center_y = (boardRow * 150) + 75
 
     # Draw which ever player made the move
     if current_player == "O":
-        pygame.draw.circle(board, (0, 0, 0), (center_x, center_y), 36, 2)
+        pygame.draw.circle(board, (0, 0, 0), (center_x, center_y), 50, 2)
     else:
-        pygame.draw.line(board, (0, 0, 0), (center_x - 24, center_y - 24), \
-                         (center_x + 24, center_y + 24), 2)
-        pygame.draw.line(board, (0, 0, 0), (center_x + 24, center_y - 24), \
-                         (center_x - 24, center_y + 24), 2)
+        pygame.draw.line(board, (0, 0, 0), (center_x - 45, center_y - 45), \
+                         (center_x + 45, center_y + 45), 2)
+        pygame.draw.line(board, (0, 0, 0), (center_x + 45, center_y - 45), \
+                         (center_x - 45, center_y + 45), 2)
 
     board_state[boardRow][boardCol] = current_player
 
 def check_value(mouse_position):
-    if mouse_position < 100:
+    if mouse_position < 150:
         return 0
-    elif mouse_position < 200:
+    elif mouse_position < 300:
         return 1
     else:
         return 2
@@ -107,8 +91,6 @@ def show_board(ttt_display, board):
     ttt   : the initialized pyGame display
     board : the game board surface
     """
-
-    #draw_status(board)
     ttt_display.blit(board, (0, 0))
     pygame.display.flip()
 
@@ -117,38 +99,36 @@ def check_win():
     Logic to check when the game has finished
     """
 
-    # check for winning rows
+    # Rows
     for row in range(0, 3):
         if board_state[row][0] == board_state[row][1] == board_state[row][2] and \
            board_state[row][0] is not None:
             # this row won
             winner = board_state[row][0]
-            pygame.draw.line(board, (250, 0, 0), (0, (row + 1)*100 - 50), \
-                            (300, (row + 1)*100 - 50), 2)
-            break
+            pygame.draw.line(board, (450, 0, 0), (0, (row + 1) * 150 - 50), \
+                            (300, (row + 1) * 150 - 50), 3)
+            return
 
-    # check for winning columns
+    # Columns
     for col in range(0, 3):
         if (board_state[0][col] == board_state[1][col] == board_state[2][col]) and \
            (board_state[0][col] is not None):
             # this column won
             winner = board_state[0][col]
-            pygame.draw.line(board, (250, 0, 0), ((col + 1) * 100 - 50, 0), \
-                            ((col + 1)* 100 - 50, 300), 2)
-            break
+            pygame.draw.line(board, (450, 0, 0), ((col + 1) * 150 - 50, 0), \
+                            ((col + 1)* 150 - 50, 300), 3)
+            return
 
-    # check for diagonal winners
+    # Diagonals
     if (board_state[0][0] == board_state[1][1] == board_state[2][2]) and \
        (board_state[0][0] is not None):
-        # game won diagonally left to right
         winner = board_state[0][0]
-        pygame.draw.line(board, (250, 0, 0), (50, 50), (250, 250), 2)
+        pygame.draw.line(board, (450, 0, 0), (50, 50), (450, 450), 3)
 
     if (board_state[0][2] == board_state[1][1] == board_state[2][0]) and \
        (board_state[0][2] is not None):
-        # game won diagonally right to left
         winner = board_state[0][2]
-        pygame.draw.line(board, (250, 0, 0), (250, 50), (50, 250), 2)
+        pygame.draw.line(board, (450, 0, 0), (450, 50), (50, 450), 3)
 
 def main():
     while 1:
@@ -168,7 +148,7 @@ if __name__ == "__main__":
     current_player = "X"
 
     pygame.init()
-    ttt_display = pygame.display.set_mode((300, 325))
+    ttt_display = pygame.display.set_mode((450, 475))
     pygame.display.set_caption('Tic-Tac-Toe')
 
     board = init_board(ttt_display)
