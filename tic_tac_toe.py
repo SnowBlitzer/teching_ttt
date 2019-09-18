@@ -1,4 +1,5 @@
 import pygame
+import time
 from pygame.locals import *
 
 DEBUG = False
@@ -105,30 +106,36 @@ def check_win():
            board_state[row][0] is not None:
             # this row won
             winner = board_state[row][0]
-            pygame.draw.line(board, (450, 0, 0), (0, (row + 1) * 150 - 50), \
-                            (300, (row + 1) * 150 - 50), 3)
-            return
 
+    #pygame.draw.line(background, (0, 0, 0), (0, 300), (450, 300), 3)
+            pygame.draw.line(board, (255, 0, 0), (0, (row + 1) * 150 - 75), \
+                            (450, (row + 1) * 150 - 75), 3)
+
+            break
+
+#line(surface, color, start_pos, end_pos, width) -> Rect
     # Columns
     for col in range(0, 3):
         if (board_state[0][col] == board_state[1][col] == board_state[2][col]) and \
            (board_state[0][col] is not None):
             # this column won
             winner = board_state[0][col]
-            pygame.draw.line(board, (450, 0, 0), ((col + 1) * 150 - 50, 0), \
-                            ((col + 1)* 150 - 50, 300), 3)
-            return
+            pygame.draw.line(board, (255, 0, 0), ((col + 1) * 150 - 75, 0), \
+                            ((col + 1)* 150 - 75, 450), 3)
+
+            break
 
     # Diagonals
     if (board_state[0][0] == board_state[1][1] == board_state[2][2]) and \
        (board_state[0][0] is not None):
         winner = board_state[0][0]
-        pygame.draw.line(board, (450, 0, 0), (50, 50), (450, 450), 3)
+        pygame.draw.line(board, (255, 0, 0), (50, 50), (400, 400), 3)
 
     if (board_state[0][2] == board_state[1][1] == board_state[2][0]) and \
        (board_state[0][2] is not None):
         winner = board_state[0][2]
-        pygame.draw.line(board, (450, 0, 0), (450, 50), (50, 450), 3)
+        pygame.draw.line(board, (255, 0, 0), (400, 50), (50, 400), 3)
+
 
 def main():
     while 1:
