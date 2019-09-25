@@ -1,16 +1,15 @@
 import pygame
-import time
 from pygame.locals import *
-
 
 class Board:
   def __init__(self):
+    """Setting up the basis of the game!"""
     self.current_player = "X"
     self.board_state = [[None, None, None],
                         [None, None, None],
                         [None, None, None]]
 
-    pygame.init()
+    pygame.init() # Starts up pygame
     self.ttt_display = pygame.display.set_mode((450, 475))
     pygame.display.set_caption('Tic-Tac-Toe')
 
@@ -65,6 +64,7 @@ class Board:
     pass
 
 def check_value(mouse_position):
+  """Checks where the user has clicked"""
   if mouse_position < 150:
     return 0
   elif mouse_position < 300:
@@ -86,70 +86,14 @@ def make_move(game):
   Determine where was clicked, if there was a play there already, and if not,
   draws the player's icon
   """
-
-  (mouse_x, mouse_y) = pygame.mouse.get_pos()
-  (row, col) = find_click_pos(mouse_x, mouse_y)
-
-  # If the place has already been selected, we won't do anything
-  if game.board_state[row][col] != None:
-    return
-
-  game.draw_move(row, col)
-  check_win(game)
-
-  if game.current_player == "X":
-    game.set_current_player("O")
-  else:
-    game.set_current_player("X")
+  pass
 
 def check_win(game):
-  # Rows
-  for row in range(0, 3):
-    if game.board_state[row][0] == game.board_state[row][1] == game.board_state[row][2] and \
-       game.board_state[row][0] is not None:
-
-        winner = game.board_state[row][0]
-
-        pygame.draw.line(game.board_layout, (255, 0, 0), (0, (row + 1) * 150 - 75), \
-                         (450, (row + 1) * 150 - 75), 3)
-
-        game.show_winner_message(winner)
-        break
-
-  # Columns
-  for col in range(0, 3):
-    if game.board_state[0][col] == game.board_state[1][col] == game.board_state[2][col] and \
-       game.board_state[0][col] is not None:
-
-        winner = game.board_state[0][col]
-        pygame.draw.line(game.board_layout, (255, 0, 0), ((col + 1) * 150 - 75, 0), \
-                         ((col + 1)* 150 - 75, 450), 3)
-        game.show_winner_message(winner)
-        break
-
-  # Diagonals
-  if game.board_state[0][0] == game.board_state[1][1] == game.board_state[2][2] and \
-     game.board_state[0][0] is not None:
-        winner = game.board_state[0][0]
-        pygame.draw.line(game.board_layout, (255, 0, 0), (50, 50), (400, 400), 3)
-        game.show_winner_message(winner)
-
-  if game.board_state[0][2] == game.board_state[1][1] == game.board_state[2][0] and \
-     game.board_state[0][2] is not None:
-        winner = game.board_state[0][2]
-        pygame.draw.line(game.board_layout, (255, 0, 0), (400, 50), (50, 400), 3)
-        game.show_winner_message(winner)
-
+  """Checking if the last move won the game or not"""
+  pass
 
 def main(game):
-  while 1:
-    for event in pygame.event.get():
-      if event.type is QUIT:
-        return
-      elif event.type is MOUSEBUTTONDOWN:
-        make_move(game)
-
-      game.show_board()
+  pass
 
 if __name__ == "__main__":
   game = Board()
