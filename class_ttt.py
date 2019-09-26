@@ -54,15 +54,29 @@ class Board:
 
     self.board_state[boardRow][boardCol] = self.current_player
 
+  def draw_status_message(self, winner):
+    if winner is not None:
+        message = winner + " won!"
+    else:
+      if game.current_player == "X":
+        game.set_current_player("O")
+      else:
+        game.set_current_player("X")
+
+      message = game.current_player + "'s turn"
+
+    font = pygame.font.Font(None, 24)
+    text = font.render(message, 1, (10, 10, 10))
+
+    self.board_layout.fill((250, 250, 250), (0, 450, 450, 25))
+    self.board_layout.blit(text, (10, 450))
+
   def show_board(self):
     """
     Redraw the board with updated information
     """
     self.ttt_display.blit(self.board_layout, (0, 0))
     pygame.display.flip()
-
-  def show_winner_message(self, winner):
-    pass
 
 def check_value(mouse_position):
   if mouse_position < 150:
@@ -95,15 +109,12 @@ def make_move(game):
     return
 
   game.draw_move(row, col)
-  check_win(game)
-
-  if game.current_player == "X":
-    game.set_current_player("O")
-  else:
-    game.set_current_player("X")
+  possible_winner = check_win(game)
+  game.draw_status_message(possible_winner)
 
 def check_win(game):
   # Rows
+  winner = None
   for row in range(0, 3):
     if game.board_state[row][0] == game.board_state[row][1] == game.board_state[row][2] and \
        game.board_state[row][0] is not None:
@@ -113,7 +124,6 @@ def check_win(game):
         pygame.draw.line(game.board_layout, (255, 0, 0), (0, (row + 1) * 150 - 75), \
                          (450, (row + 1) * 150 - 75), 3)
 
-        game.show_winner_message(winner)
         break
 
   # Columns
@@ -124,7 +134,7 @@ def check_win(game):
         winner = game.board_state[0][col]
         pygame.draw.line(game.board_layout, (255, 0, 0), ((col + 1) * 150 - 75, 0), \
                          ((col + 1)* 150 - 75, 450), 3)
-        game.show_winner_message(winner)
+
         break
 
   # Diagonals
@@ -132,14 +142,13 @@ def check_win(game):
      game.board_state[0][0] is not None:
         winner = game.board_state[0][0]
         pygame.draw.line(game.board_layout, (255, 0, 0), (50, 50), (400, 400), 3)
-        game.show_winner_message(winner)
 
   if game.board_state[0][2] == game.board_state[1][1] == game.board_state[2][0] and \
      game.board_state[0][2] is not None:
         winner = game.board_state[0][2]
         pygame.draw.line(game.board_layout, (255, 0, 0), (400, 50), (50, 400), 3)
-        game.show_winner_message(winner)
 
+  return winner
 
 def main(game):
   while 1:
